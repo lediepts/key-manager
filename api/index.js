@@ -46,7 +46,7 @@ const authAdmin = (req, res, next) => {
 };
 
 // --- ROUTES QUẢN LÝ (Có bảo mật) ---
-app.get("/", (req, res) => res.redirect("/admin"));
+
 app.get("/admin", authAdmin, async (req, res) => {
   const keys = await Key.find().sort({ createdAt: -1 });
   res.render("dashboard", { keys });
