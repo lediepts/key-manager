@@ -69,6 +69,21 @@ app.post("/admin/reset/:id", authAdmin, async (req, res) => {
   await Key.findByIdAndUpdate(req.params.id, { hwid: null, isUsed: false });
   res.redirect("/admin");
 });
+app.post("/admin/plus-acc/:id", authAdmin, async (req, res) => {
+  const before = await Key.findById(req.params.id);
+  await Key.findByIdAndUpdate(req.params.id, {
+    maxAccount: (before.maxAccount || 1) + 1,
+  });
+  res.redirect("/admin");
+});
+app.post("/admin/minus-acc/:id", authAdmin, async (req, res) => {
+  const before = await Key.findById(req.params.id);
+  if (before.maxAccount > 1)
+    await Key.findByIdAndUpdate(req.params.id, {
+      maxAccount: (before.maxAccount || 1) - 1,
+    });
+  res.redirect("/admin");
+});
 
 app.post("/admin/delete/:id", authAdmin, async (req, res) => {
   await Key.findByIdAndDelete(req.params.id);

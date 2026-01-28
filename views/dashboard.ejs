@@ -52,6 +52,12 @@
                 </td>
                 <td>
                   <div class="d-flex gap-2">
+                    <form action="/admin/plus-acc/<%= k._id %>" method="POST">
+                      <button class="btn btn-sm btn-success">+</button>
+                    </form>
+                    <form action="/admin/minus-acc/<%= k._id %>" method="POST">
+                      <button class="btn btn-sm btn-info">-</button>
+                    </form>
                     <form action="/admin/reset/<%= k._id %>" method="POST">
                       <button class="btn btn-sm btn-warning">Reset</button>
                     </form>
