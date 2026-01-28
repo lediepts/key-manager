@@ -10,9 +10,14 @@
   <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2>License Key Management</h2>
-      <form action="/admin/generate" method="POST" class="d-flex gap-2">
-        <input type="number" name="count" class="form-control" value="1" min="1" max="50" style="width: 80px;">
-        <button type="submit" class="btn btn-primary">Sinh Key Mới</button>
+      <form action="/admin/generate" method="POST" class="d-flex gap-2 align-items-center">
+        <label for="count">Số lượng key cần tạo</label>
+        <input type="number" id="count" name="count" class="form-control" value="1" min="1" max="50"
+          style="width: 80px;" placeholder="số lượng key">
+        <label for="maxAccount">Số account tối đa</label>
+        <input type="number" id="maxAccount" name="maxAccount" class="form-control" value="2" min="1" max="10"
+          style="width: 80px;" placeholder="số lượng account">
+        <button type="submit" class="btn btn-primary">Bắt đầu tạo key</button>
       </form>
     </div>
 
@@ -23,6 +28,7 @@
             <tr>
               <th>Key</th>
               <th>Trạng thái</th>
+              <th>Max Account</th>
               <th>Hardware ID (HWID)</th>
               <th>Hành động</th>
             </tr>
@@ -37,6 +43,9 @@
                   <span class="badge bg-<%= k.isUsed ? 'danger' : 'success' %>">
                     <%= k.isUsed ? 'Đã dùng' : 'Sẵn sàng' %>
                   </span>
+                </td>
+                <td class="text-muted small">
+                  <%= k.maxAccount || '---' %>
                 </td>
                 <td class="text-muted small">
                   <%= k.hwid || '---' %>

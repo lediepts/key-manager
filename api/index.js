@@ -19,6 +19,7 @@ const Key = mongoose.model(
   "Key",
   new mongoose.Schema({
     key: String,
+    maxAccount: { type: Number, default: 2 },
     hwid: { type: String, default: null },
     isUsed: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
@@ -54,9 +55,11 @@ app.get("/admin", authAdmin, async (req, res) => {
 
 app.post("/admin/generate", authAdmin, async (req, res) => {
   const count = Math.min(parseInt(req.body.count) || 1, 50);
+  const maxAccount = Math.min(parseInt(req.body.maxAccount) || 1, 50);
   const newKeys = Array.from({ length: count }).map(() => ({
     key: nanoid(10).toUpperCase(),
     isUsed: false,
+    maxAccount,
   }));
   await Key.insertMany(newKeys);
   res.redirect("/admin");
@@ -85,11 +88,19 @@ app.post("/api/verify-key", async (req, res) => {
     keyDoc.hwid = hwid;
     keyDoc.isUsed = true;
     await keyDoc.save();
-    return res.json({ valid: true, message: "Kích hoạt thành công!" });
+    return res.json({
+      valid: true,
+      maxAccount: keyDoc.maxAccount,
+      message: "Kích hoạt thành công!",
+    });
   }
 
   if (keyDoc.hwid === hwid) {
-    return res.json({ valid: true, message: "Xác thực thành công!" });
+    return res.json({
+      valid: true,
+      maxAccount: keyDoc.maxAccount,
+      message: "Xác thực thành công!",
+    });
   } else {
     return res
       .status(403)
